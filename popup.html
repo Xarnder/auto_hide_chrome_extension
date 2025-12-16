@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Auto Hide Settings</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h3>Auto Hide Page</h3>
+
+  <div class="setting">
+    <label for="darkModeToggle">Dark Mode:</label>
+    <label class="switch">
+      <input type="checkbox" id="darkModeToggle">
+      <span class="slider round"></span>
+    </label>
+  </div>
+  <hr>
+
+  <!-- Added a class here for easier styling -->
+  <div class="setting password-section">
+    <label for="password">Set Master Password:</label>
+    <input type="password" id="password" placeholder="Enter a password">
+    <button id="setPassword">Set</button>
+  </div>
+  
+  <p id="status"></p>
+
+  <fieldset id="mainControls">
+    <hr>
+    <div class="setting">
+      <label for="toggle" id="manualToggleLabel">Enable for this tab (Manual):</label>
+      <label class="switch">
+        <input type="checkbox" id="toggle">
+        <span class="slider round"></span>
+      </label>
+    </div>
+    <hr>
+    <h3>Always Hide These Sites</h3>
+    <p class="description">Enter one domain per line (e.g., bbc.co.uk).</p>
+    <textarea id="alwaysOnSites" rows="4"></textarea>
+    <button id="saveSitesBtn">Save Site List</button>
+  </fieldset>
+
+  <script src="popup.js"></script>
+</body>
+</html>
