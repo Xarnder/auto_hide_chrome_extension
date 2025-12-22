@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Auto Hide Page",
-  "version": "1.2",
-  "description": "Hides the current page when you switch tabs or lose focus, and requires a password to unhide.",
+  "version": "1.5",
+  "description": "Hides specific sites with a decoy error screen.",
   "permissions": [
     "storage",
     "tabs",
@@ -30,7 +30,11 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["decoy.css", "icons/error.svg"],
+      "resources": [
+        "decoy.css", 
+        "icons/error.svg",
+        "assets/*.svg" 
+      ],
       "matches": ["<all_urls>"]
     }
   ]

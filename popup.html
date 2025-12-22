@@ -5,40 +5,48 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h3>Auto Hide Page</h3>
+  <h3>Auto Hide</h3>
 
-  <div class="setting">
-    <label for="darkModeToggle">Dark Mode:</label>
+  <!-- Appearance -->
+  <div class="card setting">
+    <label for="darkModeToggle">Dark Mode</label>
     <label class="switch">
       <input type="checkbox" id="darkModeToggle">
       <span class="slider round"></span>
     </label>
   </div>
-  <hr>
 
-  <!-- Added a class here for easier styling -->
-  <div class="setting password-section">
-    <label for="password">Set Master Password:</label>
-    <input type="password" id="password" placeholder="Enter a password">
-    <button id="setPassword">Set</button>
+  <!-- Password -->
+  <div class="card">
+    <label for="password" style="display:block; margin-bottom:8px; font-weight:500;">Master Password</label>
+    <input type="password" id="password" placeholder="Set a recovery code...">
+    <button id="setPassword">Set Password</button>
   </div>
   
   <p id="status"></p>
 
   <fieldset id="mainControls">
-    <hr>
-    <div class="setting">
-      <label for="toggle" id="manualToggleLabel">Enable for this tab (Manual):</label>
+    <h3 class="section-title">Controls</h3>
+    
+    <!-- Manual Toggle -->
+    <div class="card setting">
+      <div style="padding-right: 10px;">
+        <label for="toggle" style="display:block;">Hide this Tab</label>
+        <p class="description" id="manualToggleLabel">Manual override</p>
+      </div>
       <label class="switch">
         <input type="checkbox" id="toggle">
         <span class="slider round"></span>
       </label>
     </div>
-    <hr>
-    <h3>Always Hide These Sites</h3>
-    <p class="description">Enter one domain per line (e.g., bbc.co.uk).</p>
-    <textarea id="alwaysOnSites" rows="4"></textarea>
-    <button id="saveSitesBtn">Save Site List</button>
+
+    <!-- Always On List -->
+    <h3 class="section-title">Automatic List</h3>
+    <div class="card">
+      <p class="description">Always hide these domains (one per line):</p>
+      <textarea id="alwaysOnSites" rows="3" placeholder="example.com&#10;youtube.com"></textarea>
+      <button id="saveSitesBtn">Save List</button>
+    </div>
   </fieldset>
 
   <script src="popup.js"></script>

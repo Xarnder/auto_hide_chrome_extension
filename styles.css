@@ -1,94 +1,66 @@
+:root {
+  --primary: #5865f2;
+  --bg: #ffffff;
+  --surface: #f8f9fa;
+  --text: #2c3e50;
+  --text-sub: #6c757d;
+  --border-r: 12px;
+}
+
 body {
-  font-family: sans-serif;
-  width: 250px;
-  padding: 15px;
-  background-color: #f9f9f9;
-  color: #333;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  width: 320px;
+  margin: 0; padding: 16px;
+  background-color: var(--bg); color: var(--text);
   transition: background-color 0.3s, color 0.3s;
 }
 
-/* Dark Mode for Popup */
-body.dark-mode {
-  background-color: #2c2f33;
-  color: #e2e2e2;
-}
-/* ...and add the margin to it as well */
-body.dark-mode hr {
-  border-top: 1px solid #4f545c;
-  margin: 20px 0; /* Add this line */
+h3 { margin: 0 0 16px 0; font-size: 18px; font-weight: 700; }
+h3.section-title { font-size: 13px; text-transform: uppercase; color: var(--text-sub); margin: 24px 0 10px 0; letter-spacing: 0.5px; }
+
+.card {
+  background-color: var(--surface);
+  border-radius: var(--border-r);
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
-body.dark-mode p.description {
-  color: #999;
-}
-body.dark-mode input, body.dark-mode textarea {
-  background-color: #23272a;
-  color: #e2e2e2;
-  border: 1px solid #4f545c;
-}
-body.dark-mode button {
-  background-color: #7289da;
-  color: white;
-  border: none;
-}
+.setting { display: flex; align-items: center; justify-content: space-between; }
+.setting label { font-size: 14px; font-weight: 500; }
 
+input[type="password"], textarea {
+  width: 100%; padding: 10px;
+  border-radius: 8px; border: 1px solid #dee2e6;
+  font-family: inherit; font-size: 13px;
+  box-sizing: border-box; margin-bottom: 8px;
+}
+input:focus, textarea:focus { outline: none; border-color: var(--primary); }
 
-h3 { margin-top: 0; }
-.setting { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
-input#password { width: 120px; }
-p#status { font-size: 12px; color: #4caf50; min-height: 1.2em;}
-textarea { width: 95%; margin-bottom: 5px; resize: vertical;}
-button { cursor: pointer; padding: 5px 10px; border-radius: 3px; }
-p.description { font-size: 11px; color: #666; margin-top: 0; margin-bottom: 5px;}
-hr { border: none; border-top: 1px solid #ccc; margin: 20px 0; }
+button {
+  width: 100%; cursor: pointer; padding: 8px 16px;
+  border-radius: 8px; border: none;
+  font-weight: 600; font-size: 13px;
+  background-color: var(--primary); color: white;
+  transition: transform 0.1s;
+}
+button:active { transform: scale(0.98); }
 
-/* The switch */
-.switch { position: relative; display: inline-block; width: 60px; height: 34px; }
+/* Switch */
+.switch { position: relative; display: inline-block; width: 44px; height: 24px; }
 .switch input { opacity: 0; width: 0; height: 0; }
-.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; }
-.slider.round { border-radius: 34px; }
-.slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%;}
-input:checked + .slider { background-color: #7289da; }
-input:checked + .slider:before { transform: translateX(26px); }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e0; transition: .3s; border-radius: 34px; }
+.slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
+input:checked + .slider { background-color: var(--primary); }
+input:checked + .slider:before { transform: translateX(20px); }
 
+/* Utils */
+p.description { font-size: 12px; color: var(--text-sub); margin: 0 0 8px 0; line-height: 1.4; }
+p#status { font-size: 13px; font-weight: 600; margin: 10px 0; text-align: center; border-radius: 6px; padding: 4px; }
+fieldset { border: none; padding: 0; margin: 0; }
+fieldset[disabled] { opacity: 0.6; pointer-events: none; filter: grayscale(0.8); }
 
-/* --- Add these styles at the end --- */
-
-/* Remove default fieldset styling */
-fieldset {
-  border: none;
-  padding: 0;
-  margin: 0;
-}
-
-/* Style the disabled sections for clarity */
-fieldset[disabled] {
-  opacity: 0.5;
-  pointer-events: none; /* Prevents clicks */
-}
-
-
-.password-container {
-  margin-top: 10px;
-}
-
-/* --- Add these styles at the end --- */
-
-/* Add space below the password section */
-.password-section {
-  margin-bottom: 5px !important;
-  padding-bottom: 10px !important;
-}
-
-/* Remove default fieldset styling */
-fieldset {
-  border: none;
-  padding: 0;
-  margin: 0;
-}
-
-/* Style the disabled sections for clarity */
-fieldset[disabled] {
-  opacity: 0.5;
-  pointer-events: none; /* Prevents clicks */
-}
+/* Dark Mode */
+body.dark-mode { --bg: #202225; --surface: #2f3136; --text: #dcddde; --text-sub: #b9bbbe; }
+body.dark-mode input, body.dark-mode textarea { background-color: #40444b; border-color: #202225; color: white; }
+body.dark-mode .slider { background-color: #4f545c; }

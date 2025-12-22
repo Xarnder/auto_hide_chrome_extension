@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Get references to all elements
   const mainControls = document.getElementById('mainControls');
   const darkModeToggle = document.getElementById('darkModeToggle');
   const toggleSwitch = document.getElementById('toggle');
@@ -10,94 +9,91 @@ document.addEventListener('DOMContentLoaded', () => {
   const sitesTextarea = document.getElementById('alwaysOnSites');
   const saveSitesBtn = document.getElementById('saveSitesBtn');
 
-  // --- Main Initialization Function ---
   const initializePopup = () => {
     chrome.storage.local.get(['password', 'enabledTabs', 'alwaysOnSites', 'darkMode'], (result) => {
-      // 1. Check for Master Password first
+      // 1. Password Check
       if (!result.password) {
         mainControls.disabled = true;
-        statusEl.textContent = 'Please set a master password to enable features.';
-        statusEl.style.color = '#ff9800'; // Orange color for warnings
-        return; // Stop initialization here
+        statusEl.textContent = 'Set a master password first.';
+        statusEl.style.color = '#e91e63'; 
+        statusEl.style.backgroundColor = '#fce4ec';
+        return;
       }
 
-      // If password exists, enable controls and proceed
       mainControls.disabled = false;
       statusEl.textContent = '';
-      statusEl.style.color = '#4caf50'; // Back to green
+      statusEl.style.backgroundColor = 'transparent';
 
-      // 2. Set Dark Mode state
+      // 2. Dark Mode
       if (result.darkMode) {
         document.body.classList.add('dark-mode');
         darkModeToggle.checked = true;
       }
       
-      // 3. Load the "Always On" sites list
+      // 3. Load Sites List
       if (result.alwaysOnSites && result.alwaysOnSites.length > 0) {
         sitesTextarea.value = result.alwaysOnSites.join('\n');
       }
 
-      // 4. Check the current tab's status ("double-check" logic)
+      // 4. Check Current Tab
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         if (tabs.length === 0) return;
         const currentTab = tabs[0];
         const tabId = currentTab.id;
         
-        // Check if this site is on the "always on" list
-        const isAlwaysOnSite = result.alwaysOnSites && currentTab.url && result.alwaysOnSites.some(site => currentTab.url.includes(site));
+        // Check if current site is in the "Always On" list
+        const isAlwaysOnSite = result.alwaysOnSites && currentTab.url && result.alwaysOnSites.some(site => currentTab.url.toLowerCase().includes(site.toLowerCase()));
 
         if (isAlwaysOnSite) {
           toggleSwitch.checked = true;
           toggleSwitch.disabled = true;
-          manualToggleLabel.textContent = "Enabled automatically (in list)";
+          manualToggleLabel.textContent = "Automatic (Always On Site)";
+          manualToggleLabel.style.color = "#4caf50";
         } else if (currentTab.url && (currentTab.url.startsWith('chrome://') || currentTab.url.startsWith('https://chrome.google.com/webstore'))) {
-          // Disable for protected pages
           toggleSwitch.disabled = true;
-          manualToggleLabel.textContent = "Manual mode disabled on this page.";
+          manualToggleLabel.textContent = "System Page (Protected)";
         } else {
-          // It's a normal page, so set the toggle based on manual setting
           toggleSwitch.disabled = false;
-          manualToggleLabel.textContent = "Enable for this tab (Manual):";
+          manualToggleLabel.textContent = "Manual override";
+          manualToggleLabel.style.color = "";
           toggleSwitch.checked = !!(result.enabledTabs && result.enabledTabs[tabId]);
         }
       });
     });
   };
 
-  // Run initialization when the popup opens
   initializePopup();
 
-  // --- Event Listeners ---
-
-  darkModeToggle.addEventListener('change', () => { /* ... (no changes) ... */ });
-  saveSitesBtn.addEventListener('click', () => { /* ... (no changes) ... */ });
-  toggleSwitch.addEventListener('change', () => { /* ... (no changes) ... */ });
+  // --- Listeners ---
 
   setPasswordBtn.addEventListener('click', () => {
     const password = passwordInput.value;
     if (password) {
       chrome.storage.local.set({ password: password }, () => {
-        statusEl.textContent = 'Password set! Features enabled.';
+        statusEl.textContent = 'Password saved!';
         statusEl.style.color = '#4caf50';
-        // Re-initialize the popup to enable controls and load settings
+        statusEl.style.backgroundColor = '#e8f5e9';
         initializePopup();
+        setTimeout(() => { statusEl.textContent = ''; statusEl.style.backgroundColor = 'transparent'; }, 2000);
       });
     }
   });
 
-  // --- Functions below are unchanged ---
   darkModeToggle.addEventListener('change', () => {
     const isDarkMode = darkModeToggle.checked;
     chrome.storage.local.set({ darkMode: isDarkMode });
     document.body.classList.toggle('dark-mode', isDarkMode);
   });
+  
   saveSitesBtn.addEventListener('click', () => {
+    // Split by new line, trim whitespace, remove empty lines
     const sites = sitesTextarea.value.split('\n').map(s => s.trim()).filter(s => s);
     chrome.storage.local.set({ alwaysOnSites: sites }, () => {
-      statusEl.textContent = 'Site list saved!';
-      setTimeout(() => { statusEl.textContent = ''; }, 2000);
+      saveSitesBtn.textContent = 'Saved!';
+      setTimeout(() => { saveSitesBtn.textContent = 'Save List'; }, 2000);
     });
   });
+  
   toggleSwitch.addEventListener('change', () => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (tabs.length === 0) return;
