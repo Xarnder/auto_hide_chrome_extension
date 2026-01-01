@@ -17,7 +17,7 @@ if (!window.autoHideFunctionsDefined) {
     'error7.svg',
     'error8.svg',
     'error9.svg'
-  ]; 
+  ];
 
   const errorMessages = [
     { title: 'Error 503', sub: 'The server is temporarily unavailable.' },
@@ -30,7 +30,7 @@ if (!window.autoHideFunctionsDefined) {
 
   window.createDecoyPage = (isDarkMode) => {
     const randomMsg = window.getRandomItem(errorMessages);
-    
+
     // Safety check: Is the array empty?
     const hasAssets = (svgAssets && svgAssets.length > 0);
     const randomIconName = hasAssets ? window.getRandomItem(svgAssets) : null;
@@ -48,13 +48,13 @@ if (!window.autoHideFunctionsDefined) {
     // LOGIC: Build the full path (assets/filename)
     let iconUrl;
     if (randomIconName) {
-        // This becomes: chrome-extension://.../assets/error3.svg
-        iconUrl = chrome.runtime.getURL(`assets/${randomIconName}`);
+      // This becomes: chrome-extension://.../assets/error3.svg
+      iconUrl = chrome.runtime.getURL(`assets/${randomIconName}`);
     } else {
-        // Fallback if list is empty or file missing
-        iconUrl = chrome.runtime.getURL('icons/error.svg');
+      // Fallback if list is empty or file missing
+      iconUrl = chrome.runtime.getURL('icons/error.svg');
     }
-    
+
     // Debug log to help you check if the path is correct
     console.log("[Content] Using Icon URL:", iconUrl);
 
@@ -87,9 +87,9 @@ if (!window.autoHideFunctionsDefined) {
     try {
       const { darkMode } = await chrome.storage.local.get('darkMode');
       window.injectStylesheet();
-      
+
       const overlay = window.createDecoyPage(darkMode);
-      
+
       // Force append to documentElement (<html> tag)
       if (document.documentElement) {
         document.documentElement.appendChild(overlay);
@@ -104,23 +104,23 @@ if (!window.autoHideFunctionsDefined) {
     const overlay = document.getElementById('auto-hide-overlay');
     if (overlay) overlay.remove();
     document.documentElement.style.overflow = '';
-    if (!isDisabling) { 
-        chrome.runtime.sendMessage({ action: 'pageWasShown' }).catch(()=>{}); 
+    if (!isDisabling) {
+      chrome.runtime.sendMessage({ action: 'pageWasShown' }).catch(() => { });
     }
   };
 
   window.promptForPassword = () => {
     setTimeout(() => {
-        const password = prompt('Enter error recovery code:');
-        if (password === null) return;
+      const password = prompt('Enter error recovery code:');
+      if (password === null) return;
 
-        chrome.storage.local.get('password', (result) => {
-          if (result.password && result.password === password) {
-            window.unhidePage();
-          } else { 
-            alert('Incorrect recovery code.'); 
-          }
-        });
+      chrome.storage.local.get('password', (result) => {
+        if (result.password && result.password === password) {
+          window.unhidePage();
+        } else {
+          alert('Incorrect recovery code.');
+        }
+      });
     }, 10);
   };
 
@@ -137,10 +137,11 @@ if (!window.autoHideFunctionsDefined) {
   chrome.runtime.onMessage.addListener((msg) => {
     if (msg.action === 'hide') window.hidePage();
     if (msg.action === 'unhide_and_disable') window.unhidePage(true);
+    if (msg.action === 'unhide_temp') window.unhidePage();
   });
 }
 
 // Ensure hidePage runs immediately
 if (window.hidePage) {
-    window.hidePage();
+  window.hidePage();
 }
